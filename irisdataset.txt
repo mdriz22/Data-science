@@ -1,0 +1,178 @@
+import pandas as pd
+import numpy as np
+import os
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+
+[RUN]
+
+
+df=pd.read_csv("iris.csv")
+df.head()
+
+[RUN]
+
+#delete a column
+df = df.drop(columns =['Id'])
+df.head()
+
+[RUN]
+
+#to display stats about data
+df.describe()
+
+[RUN]
+
+#basic info about datatype
+df.info()
+
+[RUN]
+
+#to display no. of samples on each class
+df['Species'].value_counts()
+
+[RUN]
+
+#check for null  values
+df.isnull().sum()
+
+[RUN]
+
+#histograms
+df['SepalLengthCm'].hist()
+
+[RUN]
+
+df['SepalWidthCm'].hist()
+
+[RUN]
+
+df['PetalLengthCm'].hist()
+
+[RUN]
+
+df['PetalWidthCm'].hist()
+
+[RUN]
+
+#scatterplot
+colors=['red','orange','blue']
+species=['Iris-setosa','Iris-versicolor', 'Iris-virginica']   
+
+[RUN]
+
+for i in range(3):
+    x=df[df['Species'] == species[i]]
+    plt.scatter(x["SepalLengthCm"], x['SepalWidthCm'], c=colors[i], label=species[i])
+    plt.xlabel("Sepal Length")
+    plt.ylabel("Sepal Width")
+    plt.legend()
+
+[RUN]
+
+for i in range(3):
+    x=df[df['Species'] == species[i]]
+    plt.scatter(x["PetalLengthCm"], x['PetalWidthCm'], c=colors[i], label=species[i])
+    plt.xlabel("Petal Length")
+    plt.ylabel("Petal Width")
+    plt.legend()
+
+[RUN]
+
+for i in range(3):
+    x=df[df['Species'] == species[i]]
+    plt.scatter(x["SepalLengthCm"], x['PetalLengthCm'], c=colors[i], label=species[i])
+    plt.xlabel("Sepal Length")
+    plt.ylabel("Petal Length")
+    plt.legend()
+
+[RUN]
+
+for i in range(3):
+    x=df[df['Species'] == species[i]]
+    plt.scatter(x["SepalWidthCm"], x['PetalWidthCm'], c=colors[i], label=species[i])
+    plt.xlabel("Sepal Width")
+    plt.ylabel("Petal Width")
+    plt.legend()
+
+[RUN]
+
+
+#coorelation matrix
+df.corr()
+
+[RUN]
+
+
+corr=df.corr()
+fig, ax = plt.subplots(figsize=(5,4))
+sns.heatmap(corr , annot=True, ax=ax, cmap = 'coolwarm')
+
+[RUN]
+
+#label encoder
+from sklearn.preprocessing import LabelEncoder
+le = LabelEncoder()
+
+[RUN]
+
+df['Species'] = le.fit_transform(df['Species'])
+df.head()
+
+[RUN]
+
+#model training
+from sklearn.model_selection import train_test_split
+#train - 70%
+#test - 30%
+x=df.drop(columns=['Species'])
+y=df['Species']
+x_train, x_test, y_train, y_test = train_test_split(x,y, test_size=0.30)
+
+[RUN]
+
+#logistic regression
+from sklearn.linear_model import LogisticRegression
+model = LogisticRegression()
+
+[RUN]
+
+model.fit(x_train, y_train)
+
+[RUN]
+
+#print metric to get performance
+print("Accuracy : " , model.score(x_test, y_test)*100)
+
+[RUN]
+
+
+# knn - k-nearest neighbours
+from sklearn.neighbors import KNeighborsClassifier
+model = KNeighborsClassifier()
+
+[RUN]
+
+model.fit(x_train, y_train)
+
+[RUN]
+
+#print metric to get performance
+print("Accuracy : " , model.score(x_test, y_test)*100)
+
+[RUN]
+
+#decision tree
+from sklearn.tree import DecisionTreeClassifier
+model = DecisionTreeClassifier()
+
+
+[RUN]
+
+model.fit(x_train, y_train)
+
+[RUN]
+
+#print metric to get performance
+print("Accuracy : " , model.score(x_test, y_test)*100)
